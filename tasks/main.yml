@@ -4,7 +4,7 @@
   with_first_found:
     - files:
       - "vars/{{ ansible_distribution }}.yml"
-      skip: true
+      ignore: true
 
 - name: user-settings | Install software
   package:
