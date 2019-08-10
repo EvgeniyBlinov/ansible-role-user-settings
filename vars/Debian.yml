@@ -1,0 +1,7 @@
+---
+user_settings__packages:
+  - tmux
+  - mc
+  - vim-nox
+  - git
+  - make

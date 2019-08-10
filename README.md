@@ -1,2 +1,7 @@
-# ansible-role-user-settings
-ansible-role-user-settings
+# Совместное использование tmux на серверах
+
+#### Пример
+
+`env ENV=blinov tmux.sh` - свой конфиг
+
+`tmux.sh` - дефолтный конфиг

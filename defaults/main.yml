@@ -1,0 +1,19 @@
+---
+user_settings__packages: []
+user_settings__user_repos:
+  - src: https://github.com/EvgeniyBlinov/vim
+    dest: ~/vim-blinov
+    after_install_shell: |
+      ( cd ~/vim-blinov && make ) && \
+      ln -s ~/vim-blinov/.tmux.conf ~/tmux-blinov.conf &> /dev/null;
+      echo 'done'
+
+user_settings__default_profile_vars:
+  PATH: $PATH:$HOME/.local/bin
+  EDITOR: vim
+  VIMDIR: vim
+
+user_settings__profiles:
+  blinov: |
+    export EDITOR=vim
+    export VIMDIR=vim-blinov
