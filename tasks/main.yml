@@ -61,7 +61,7 @@
 
 - name: user-settings | Ensure default vim config is exists
   file:
-    src: /etc/vim/vimrc
+    src: "{{ user_settings__vimrc_default_path }}"
     dest: ~/vim/vimrc
     state: link
 

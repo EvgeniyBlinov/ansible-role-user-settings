@@ -1,0 +1,9 @@
+---
+user_settings__packages:
+  - tmux
+  - mc
+  - vim-enhanced
+  - git
+  - make
+
+user_settings__vimrc_default_path: /etc/vimrc
