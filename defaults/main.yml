@@ -20,3 +20,11 @@ user_settings__profiles:
     export VIMDIR=vim-blinov
 
 user_settings__vimrc_default_path: /etc/vim/vimrc
+
+user_settings__mc_settings:
+  - section: Panels
+    option: navigate_with_arrows
+    value: 1
+  - section: Midnight-Commander
+    option: use_internal_edit
+    value: 0

@@ -68,9 +68,10 @@
 - name: user-settings | Ensure mc config allow navigation by arrows
   ini_file:
     path: ~/.config/mc/ini
-    section: Panels
-    option: navigate_with_arrows
-    value: 1
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  loop: "{{ user_settings__mc_settings }}"
 
 - name: user-settings | Install tmux-starter
   template:
