@@ -1,4 +1,5 @@
 ---
+user_settings__home_bin_subpath: .local/bin
 user_settings__packages: []
 user_settings__user_repos:
   - src: https://github.com/EvgeniyBlinov/vim
@@ -9,7 +10,7 @@ user_settings__user_repos:
       echo 'done'
 
 user_settings__default_profile_vars:
-  PATH: $PATH:$HOME/.local/bin
+  PATH: "$PATH:$HOME/{{ user_settings__home_bin_subpath }}"
   EDITOR: vim
   VIMDIR: vim
 

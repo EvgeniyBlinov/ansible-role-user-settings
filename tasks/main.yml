@@ -55,7 +55,7 @@
     state: directory
   loop:
     - ~/.config/mc
-    - ~/.local/bin
+    - "~/{{ user_settings__home_bin_subpath }}"
     # default VIMDIR
     - ~/vim
 
@@ -74,9 +74,12 @@
 
 - name: user-settings | Install tmux-starter
   template:
-    src: tmux.sh
-    dest: ~/.local/bin/tmux.sh
+    src: "{{ item }}"
+    dest: "~/{{ user_settings__home_bin_subpath }}/{{ item }}"
     mode: 0755
+  loop:
+    - tmux.sh
+    - mc.sh
 
 - name: user-settings | Ensure ~/.bashrc has variables
   lineinfile:
