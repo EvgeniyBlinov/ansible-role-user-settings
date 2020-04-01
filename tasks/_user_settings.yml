@@ -1,0 +1,94 @@
+---
+- name: user-settings | Set user specified variables
+  set_fact:
+    user_settings__default_profile_vars:
+      PATH: "$PATH:$HOME/{{ user_settings__home_bin_subpath }}"
+      EDITOR: vim
+      VIMDIR: "{{ user_settings__profile_var__VIMDIR }}"
+
+- name: user-settings | Install repos
+  git:
+    repo: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  register: user_settings__r_user_repos
+  loop: "{{ user_settings__user_repos }}"
+
+- name: user-settings | Run after install command
+  shell: "{{ item.after_install_shell }}"
+  args:
+    executable: /bin/bash
+  loop: "{{
+      user_settings__r_user_repos.results |
+      selectattr('changed', 'equalto', True) |
+      map(attribute='item') |
+      selectattr('after_install_shell', 'defined') |
+      list
+    }}"
+
+- name: user-settings | Ensure vimrc is exists
+  copy:
+    content: |
+      if empty($VIMDIR)
+          let $VIMDIR = 'vim'
+      endif
+      set runtimepath=$HOME/$VIMDIR,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/vimfiles/after
+      so $HOME/$VIMDIR/vimrc
+    dest: ~/.vimrc
+
+- name: user-settings | Create profiles
+  copy:
+    content: "{{ item.value }}"
+    dest: "~/.profile-{{ item.key }}"
+  loop: "{{ user_settings__profiles | dict2items }}"
+
+- name: user-settings | Ensure mc config dir is exists
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - ~/.config/mc
+    - "~/{{ user_settings__home_bin_subpath }}"
+    # default VIMDIR
+    - ~/vim
+
+- name: user-settings | Ensure default vim config is exists
+  file:
+    src: "{{ user_settings__vimrc_default_path }}"
+    dest: ~/vim/vimrc
+    state: link
+
+- name: user-settings | Ensure mc config allow navigation by arrows
+  ini_file:
+    path: ~/.config/mc/ini
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  loop: "{{ user_settings__mc_settings }}"
+
+- name: user-settings | Install tmux-starter
+  template:
+    src: "{{ item }}"
+    dest: "~/{{ user_settings__home_bin_subpath }}/{{ item }}"
+    mode: 0755
+  loop:
+    - tmux.sh
+    - mc.sh
+
+- name: user-settings | Ensure ~/.bashrc has variables
+  lineinfile:
+    path: ~/.bashrc
+    line: >-
+      export {{ item.key }}="{{ item.value }}"
+  loop: "{{ user_settings__default_profile_vars | dict2items }}"
+  tags:
+    - bashrc
+
+- name: user-settings | Ensure ~/.bashrc has components
+  blockinfile:
+    path: ~/.bashrc
+    marker: "### {mark} {{ item.name }} ANSIBLE MANAGED BLOCK ###"
+    block: "{{ item.content }}"
+  loop: "{{ user_settings__bashrc_blocks }}"
+  tags:
+    - bashrc
+

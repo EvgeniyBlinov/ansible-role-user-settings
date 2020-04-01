@@ -9,10 +9,7 @@ user_settings__user_repos:
       ln -s ~/vim-blinov/.tmux.conf ~/tmux-blinov.conf &> /dev/null;
       echo 'done'
 
-user_settings__default_profile_vars:
-  PATH: "$PATH:$HOME/{{ user_settings__home_bin_subpath }}"
-  EDITOR: vim
-  VIMDIR: vim
+user_settings__profile_var__VIMDIR: vim
 
 user_settings__profiles:
   blinov: |
@@ -28,3 +25,11 @@ user_settings__mc_settings:
   - section: Midnight-Commander
     option: use_internal_edit
     value: 0
+
+user_settings__bashrc_blocks:
+  - name: kubectl
+    content: >-
+      if which kubectl &> /dev/null ; then source <(kubectl completion bash);fi
+  - name: helm
+    content: >-
+      if which helm &> /dev/null ; then source <(helm completion bash);fi
