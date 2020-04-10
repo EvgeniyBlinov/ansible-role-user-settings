@@ -1,4 +1,14 @@
 ---
+- block:
+  - name: user-settings | Include vars
+    shell: whoami
+    register: user_settings__r_user
+    become: false
+
+  - set_fact:
+      ansible_user: "{{ user_settings__r_user.stdout }}"
+  when: ansible_user is undefined
+
 - name: user-settings | Include vars
   include_vars: "{{ item }}"
   with_first_found:
