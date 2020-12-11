@@ -15,6 +15,7 @@ user_settings__profiles:
   blinov: |
     export EDITOR=vim
     export VIMDIR=vim-blinov
+    alias mc='env VIMDIR=vim-blinov mc'
 
 user_settings__vimrc_default_path: /etc/vim/vimrc
 
